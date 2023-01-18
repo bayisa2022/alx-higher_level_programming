@@ -1,5 +1,5 @@
-966 Bytes
 #!/usr/bin/python3
+# 12-student.py
 """Defines a class Student."""
 
 
