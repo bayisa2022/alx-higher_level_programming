@@ -1,19 +1,32 @@
 #!/usr/bin/python3
-"""
-Script that lists all states from database hbtn_0e_0_usa
-"""
-
+"""Script that lists all states with a name starting with N"""
 import MySQLdb
 import sys
 
-if __name__ == "__main__":
-    db = MySQLdb.connect(user=sys.argv[1],
+
+def get_states_n():
+    """Takes arguments argv to list from database
+    Only lists with states that start with N
+    Arguments:
+        argv[1]: mysql username
+        argv[2]: mysql password
+        argv[3]: database name
+    """
+    db = MySQLdb.connect(host="localhost",
+                         port=3306,
+                         user=sys.argv[1],
                          passwd=sys.argv[2],
                          db=sys.argv[3])
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM states ORDER BY id ASC")
-    rows = cursor.fetchall()
-    for row in rows:
-        print(row)
-    cursor.close()
+
+    cur = db.cursor()
+
+    cur.execute("SELECT * FROM states WHERE name LIKE BINARY 'N%' ORDER BY id")
+    rows = cur.fetchall()
+    for i in rows:
+        print(i)
+
+    cur.close()
     db.close()
+
+if __name__ == "__main__":
+    get_states_n()
