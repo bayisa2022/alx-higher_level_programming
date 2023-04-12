@@ -1,13 +1,15 @@
 #!/usr/bin/python3
+""" 
+Script that takes in a URL, send a request to URL, and dispaly body
+"""
 
-import urllib.request
-import urllib.error
-import sys
 
-url = sys.argv[1]
+if __name__ == "__main__":
+    import sys
+    from urllib import request, error
 
-try:
-    with urllib.request.urlopen(url) as response:
-        print(response.read().decode('utf-8'))
-except urllib.error.HTTPError as e:
-    print(f"Error code: {e.code}")
+    try:
+        with request.urlopen(sys.argv[1]) as resp:
+            print(resp.read().decode('UTF-8'))
+    except error.HTTPError as er:
+        print('Error code:', er.code)
