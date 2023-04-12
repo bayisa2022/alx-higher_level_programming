@@ -1,20 +1,34 @@
 #!/usr/bin/python3
-# Lists all City objects from the database hbtn_0e_101_usa.
-# Usage: ./102-relationship_cities_states_list.py <mysql username> /
-#                                                 <mysql password> /
-#                                                 <database name>
-import sys
+"""
+a script that prints the State object with the name passed
+as argument from the database hbtn_0e_6_usa
+"""
+
+from sys import argv
+from model_state import Base, State
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from relationship_state import State
-from relationship_city import City
+
 
 if __name__ == "__main__":
-    engine = create_engine("mysql+mysqldb://{}:{}@localhost/{}"
-                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
-                           pool_pre_ping=True)
+
+    # make engine for database
+    user = argv[1]
+    passwd = argv[2]
+    db = argv[3]
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.
+                           format(user, passwd, db), pool_pre_ping=True)
+    Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    for city in session.query(City).order_by(City.id):
-        print("{}: {} -> {}".format(city.id, city.name, city.state.name))
+    # query python instance in database state id given state name
+    state = session.query(State).filter_by(name=argv[4]).first()
+    if state:
+        print("{:d}".format(state.id))
+    else:
+        print("Not found")
+    
+
+
+
