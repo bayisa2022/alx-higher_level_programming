@@ -1,24 +1,26 @@
-const tasks = [
-    { id: 1, user_id: 1, completed: true },
-    { id: 2, user_id: 2, completed: false },
-    { id: 3, user_id: 1, completed: true },
-    { id: 4, user_id: 3, completed: false },
-    { id: 5, user_id: 1, completed: false },
-    { id: 6, user_id: 2, completed: true },
-];
+#!/usr/bin/node
+// A script that computes the number of tasks completed by user id.
 
-function countTasksCompletedByUserId(tasksArray) {
-    const result = {};
-    tasksArray.forEach(task => {
-        if (task.completed) {
-            if (result[task.user_id]) {
-                result[task.user_id]++;
-            } else {
-                result[task.user_id] = 1;
-            }
+const args = process.argv;
+let reqURL = args[2];
+let request = require('request');
+request(reqURL, function (error, response, body) {
+  if (error) {
+    console.log('error:', error);
+  } else {
+    let todos = JSON.parse(body);
+    let dash = {};
+    for (let i = 0; i < todos.length; i++) {
+      let status = (todos[i]['completed']);
+      let key = todos[i]['userId'].toString();
+      if (status) {
+        if (dash[key]) {
+          dash[key]++;
+        } else {
+          dash[key] = 1;
         }
-    });
-    return result;
-}
-
-console.log(countTasksCompletedByUserId(tasks));
+      }
+    }
+    console.log(dash);
+  }
+});
